@@ -70,7 +70,7 @@ function FormModal(props) {
                 onChange={(e) =>
                   props.setNewSighting((prev) => ({
                     ...prev,
-                    individualId: e.target.value,
+                    individualId: parseInt(e.target.value),
                   }))
                 }>
                 <option>Select Individual Name</option>
@@ -126,8 +126,18 @@ function FormModal(props) {
         <Button
           variant="primary"
           type="submit"
-          onClick={(e) => props.addSighting(e, props.newSighting)}>
+          // onClick={(e) => props.addSighting(e, props.newSighting)}
+          onClick={(e) => props.addSighting(e)}>
+          {" "}
           Submit
+        </Button>
+        <Button
+          variant="primary"
+          type="submit"
+          // onClick={(e) => props.addSighting(e, props.newSighting)}
+          onClick={() => console.log(props.newSighting)}>
+          {" "}
+          Test
         </Button>
       </Modal.Footer>
     </Modal>

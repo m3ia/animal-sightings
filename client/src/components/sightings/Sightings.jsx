@@ -7,34 +7,41 @@ const Sightings = () => {
     id: "",
     location: "",
     date: "",
-    individualId: "",
+    individualId: 0,
     healthStatus: "",
   });
 
   // Add Sighting
-  const addSighting = async (e, sighting) => {
+  const addSighting = async (e) => {
     e.preventDefault();
-    console.log("sighting", sighting);
+    // console.log("sighting", sighting);
 
-    // const sighting = {location, date, individualId, healthStatus};
+    const sighting = {
+      location: newSighting.location,
+      date: newSighting.date,
+      individualId: newSighting.individualId,
+      healthStatus: newSighting.healthStatus,
+    };
+
     const res = await fetch("http://localhost:8080/sightings", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(sightings),
+      // Sent in with the request
+      body: JSON.stringify(sighting),
     });
+
     const content = await res.json();
     console.log("content", content);
-    setSightings([...content]);
-    // setNewSighting({
-    //   id: "",
-    //   location: "",
-    //   date: "",
-    //   individual: "",
-    //   healthStatus: "",
-    // });
+    setSightings([...sightings, content]);
+    setNewSighting({
+      location: "",
+      date: "",
+      individualId: 0,
+      healthStatus: "",
+    });
   };
   // Get Sightings
   useEffect(() => {
@@ -56,7 +63,7 @@ const Sightings = () => {
         });
     };
     getSightings();
-  }, []);
+  }, [sightings]);
 
   return (
     <>
