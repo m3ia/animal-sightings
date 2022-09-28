@@ -148,7 +148,10 @@ function AddSightingForm({
   const [individuals, setIndividuals] = useState([]);
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
+      <Button
+        variant="primary"
+        onClick={() => setModalShow(true)}
+        className="launch-modal-btn">
         Launch vertically centered modal
       </Button>
 

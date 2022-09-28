@@ -66,6 +66,7 @@ const Sightings = () => {
 
   return (
     <>
+      {/* Parent div: sightings-div */}
       <AddSightingForm
         sightings={sightings}
         setSightings={setSightings}
