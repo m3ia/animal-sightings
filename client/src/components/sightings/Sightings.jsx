@@ -7,32 +7,34 @@ const Sightings = () => {
     id: "",
     location: "",
     date: "",
-    individual: "",
+    individualId: "",
     healthStatus: "",
   });
 
   // Add Sighting
-  const addSighting = async (e) => {
+  const addSighting = async (e, sighting) => {
     e.preventDefault();
+    console.log("sighting", sighting);
 
-    const res = await fetch("http://localhocalhost:8080/sightings", {
+    // const sighting = {location, date, individualId, healthStatus};
+    const res = await fetch("http://localhost:8080/sightings", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newSighting),
+      body: JSON.stringify(sightings),
     });
     const content = await res.json();
-
-    setSightings([...sightings, content]);
-    setNewSighting({
-      id: "",
-      location: "",
-      date: "",
-      individual: "",
-      healthStatus: "",
-    });
+    console.log("content", content);
+    setSightings([...content]);
+    // setNewSighting({
+    //   id: "",
+    //   location: "",
+    //   date: "",
+    //   individual: "",
+    //   healthStatus: "",
+    // });
   };
   // Get Sightings
   useEffect(() => {

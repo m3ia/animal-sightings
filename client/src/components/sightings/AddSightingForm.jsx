@@ -2,6 +2,14 @@ import {useState, useEffect} from "react";
 import {Button, Modal, Form} from "react-bootstrap";
 
 function FormModal(props) {
+  // const [sighting, setSighting] = useState({
+  //   id: "",
+  //   location: "",
+  //   date: "",
+  //   individualId: "",
+  //   healthStatus: "",
+  // });
+
   // Get Individuals
   useEffect(() => {
     const getIndividuals = async () => {
@@ -25,7 +33,7 @@ function FormModal(props) {
 
   return (
     <Modal
-      {...props}
+      show={props.show}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered>
@@ -36,10 +44,7 @@ function FormModal(props) {
       </Modal.Header>
       <Modal.Body>
         <h4>Sighting Form</h4>
-        <form
-          id="add-sighting"
-          action="#"
-          onSubmit={() => props.addSighting(props.newSighting)}>
+        <form id="add-sighting" action="#">
           <fieldset>
             <p>
               <label>Date</label>
@@ -48,26 +53,33 @@ function FormModal(props) {
                 type="date"
                 id="add-date"
                 value={props.newSighting.date}
-                onChange={(e) =>
-                  props.setNewSighting((prev) => (prev.date = e.target.value))
-                }
+                onChange={(e) => {
+                  console.log("test", props.newSighting.date);
+                  props.setNewSighting((prev) => ({
+                    ...prev,
+                    date: e.target.value,
+                  }));
+                }}
               />
             </p>
             <p>
               <label>Individual</label>
               <br />
-              <Form.Select aria-label="Default select example">
-                <option>Individual</option>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) =>
+                  props.setNewSighting((prev) => ({
+                    ...prev,
+                    individualId: e.target.value,
+                  }))
+                }>
+                <option>Select Individual Name</option>
                 {props.individuals.map((individual) => {
                   return (
                     <option
                       key={individual.id}
-                      value={props.newSighting.individual}
-                      onSelect={(e) =>
-                        props.setNewSighting(
-                          (prev) => (prev.individual = e.target.value)
-                        )
-                      }>
+                      value={individual.id}
+                      name={individual.id}>
                       {individual.nickName}
                     </option>
                   );
@@ -80,11 +92,12 @@ function FormModal(props) {
               <input
                 type="text"
                 id="add-location"
-                value={props.newSighting.location}
+                value={props.newSighting.location || ""}
                 onChange={(e) =>
-                  props.setNewSighting(
-                    (prev) => (prev.location = e.target.value)
-                  )
+                  props.setNewSighting((prev) => ({
+                    ...prev,
+                    location: e.target.value,
+                  }))
                 }
               />
             </p>
@@ -92,22 +105,30 @@ function FormModal(props) {
               <label>Health Status</label>
               <br />
               <input
-                type="bool"
+                type="text"
                 id="add-health-status"
-                value={props.newSighting.healthStatus}
+                value={props.newSighting.healthStatus || ""}
                 onChange={(e) =>
-                  props.setNewSighting(
-                    (prev) => (prev.healthStatus = e.target.value)
-                  )
+                  props.setNewSighting((prev) => ({
+                    ...prev,
+                    healthStatus: e.target.value,
+                  }))
                 }
               />
             </p>
           </fieldset>
-          <input type="submit" value="Add" />
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button type="submit" onClick={props.onHide}>
+          Close
+        </Button>
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={(e) => props.addSighting(e, props.newSighting)}>
+          Submit
+        </Button>
       </Modal.Footer>
     </Modal>
   );
