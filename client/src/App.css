@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.cards-div {
+  border: 2px solid black;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.cards {
+  border: 2px solid #e74c3c;
+  text-align: left;
+  padding: 8px;
+  margin: 8px;
+  list-style-type: none;
+  border-radius: 10px;
+  width: 470px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}

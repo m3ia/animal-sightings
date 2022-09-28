@@ -24,8 +24,40 @@ app.get('/', (req, res) => {
 // GET - All Sightings --------------------------------------------------------
 app.get('/sightings', async function (req, res) {
   try {
-    const sightings = await db.any('SELECT * FROM sightings ORDER BY id');
+    const sightings = await db.any('SELECT Sightings.id, Sightings.location, Sightings.date_time, Individuals.nick_name, Sightings.healthy FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.id DESC');
     res.send(sightings);
+  } catch (e) {
+    return res.status(400).json({ e });
+  }
+});
+
+// POST - Add a Sighting ------------------------------------------------------
+app.post('/sightings', async (req, res) => {
+  const sighting = {
+    location: req.body.location,
+    date: req.body.date,
+    individualId: req.body.individualId,
+    healthStatus: req.body.healthStatus
+  };
+  try {
+    const createdSighting = await db.one(
+      'INSERT INTO sightings (location, date_time, individual_id, healthy, created_on) VALUES ($1, $2, $3, $4, current_date) RETURNING * ',
+      [sighting.location, sighting.date, sighting.individualId, sighting.healthStatus]
+    );
+    // const sightings = await db.any('SELECT Sightings.id, Sightings.location, Sightings.date_time, Individuals.nick_name, Sightings.healthy FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.id');
+    // res.send(sightings);
+    res.send(createdSighting);
+    
+  } catch (e) {
+    return res.status(400).json({ e });
+  }
+});
+
+// For getting the individuals
+app.get('/individuals', async function (req, res) {
+  try {
+    const individuals = await db.any('SELECT * FROM individuals');
+    res.send(individuals);
   } catch (e) {
     return res.status(400).json({ e });
   }

@@ -54,7 +54,6 @@ function FormModal(props) {
                 id="add-date"
                 value={props.newSighting.date}
                 onChange={(e) => {
-                  console.log("test", props.newSighting.date);
                   props.setNewSighting((prev) => ({
                     ...prev,
                     date: e.target.value,
@@ -126,18 +125,12 @@ function FormModal(props) {
         <Button
           variant="primary"
           type="submit"
-          // onClick={(e) => props.addSighting(e, props.newSighting)}
-          onClick={(e) => props.addSighting(e)}>
+          onClick={(e) => {
+            props.addSighting(e);
+            props.onHide();
+          }}>
           {" "}
           Submit
-        </Button>
-        <Button
-          variant="primary"
-          type="submit"
-          // onClick={(e) => props.addSighting(e, props.newSighting)}
-          onClick={() => console.log(props.newSighting)}>
-          {" "}
-          Test
         </Button>
       </Modal.Footer>
     </Modal>

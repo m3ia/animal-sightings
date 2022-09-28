@@ -14,7 +14,6 @@ const Sightings = () => {
   // Add Sighting
   const addSighting = async (e) => {
     e.preventDefault();
-    // console.log("sighting", sighting);
 
     const sighting = {
       location: newSighting.location,
@@ -74,21 +73,24 @@ const Sightings = () => {
         setNewSighting={setNewSighting}
         addSighting={addSighting}
       />
-      <ul>
-        {sightings.map((sighting, ind) => {
-          return (
-            <li key={ind} className="cards">
-              id: {sighting.id}
-              <br />
-              location: {sighting.location}
-              <br />
-              individual: {sighting.individual},
-              <br />
-              healthStatus: {sighting.healthStatus === true ? "true" : "false"}
-            </li>
-          );
-        })}
-      </ul>
+      <div className="cards-div">
+        <ul>
+          {sightings.map((sighting, ind) => {
+            return (
+              <li key={ind} className="cards">
+                id: {sighting.id}
+                <br />
+                location: {sighting.location}
+                <br />
+                individual: {sighting.individual},
+                <br />
+                healthStatus:{" "}
+                {sighting.healthStatus === true ? "true" : "false"}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </>
   );
 };
