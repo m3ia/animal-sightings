@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import AddSightingForm from "./AddSightingForm";
 
-const Sightings = () => {
+const Sightings = ({setCurrentView}) => {
   const [sightings, setSightings] = useState([]);
   const [newSighting, setNewSighting] = useState({
     id: "",
@@ -73,6 +73,7 @@ const Sightings = () => {
         newSighting={newSighting}
         setNewSighting={setNewSighting}
         addSighting={addSighting}
+        setCurrentView={setCurrentView}
       />
       <div className="cards-div">
         <ul>

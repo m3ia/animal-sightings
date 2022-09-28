@@ -9,6 +9,11 @@ const MainPage = ({setCurrentView}) => {
           onClick={() => setCurrentView("sightings")}>
           Sightings
         </div>
+        <div
+          className="individuals-btn"
+          onClick={() => setCurrentView("individuals")}>
+          Individuals
+        </div>
       </div>
     </>
   );

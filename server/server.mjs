@@ -53,10 +53,10 @@ app.post('/sightings', async (req, res) => {
   }
 });
 
-// For getting the individuals
+// GET - All Individuals---------------------------------------------------
 app.get('/individuals', async function (req, res) {
   try {
-    const individuals = await db.any('SELECT * FROM individuals');
+    const individuals = await db.any('SELECT individuals.id, individuals.nick_name, individuals.seen_on, species.scientific_name FROM individuals LEFT JOIN species ON individuals.species_id=species.id ORDER BY individuals.id DESC');
     res.send(individuals);
   } catch (e) {
     return res.status(400).json({ e });

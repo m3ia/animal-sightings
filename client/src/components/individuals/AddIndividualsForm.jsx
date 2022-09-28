@@ -2,14 +2,6 @@ import {useState, useEffect} from "react";
 import {Button, Modal, Form} from "react-bootstrap";
 
 function FormModal(props) {
-  // const [sighting, setSighting] = useState({
-  //   id: "",
-  //   location: "",
-  //   date: "",
-  //   individualId: "",
-  //   healthStatus: "",
-  // });
-
   // Get Individuals
   useEffect(() => {
     const getIndividuals = async () => {
@@ -84,12 +76,6 @@ function FormModal(props) {
                   );
                 })}
               </Form.Select>
-              {/* <button
-                className="modal-btn-ind-form"
-                variant="primary"
-                onClick={props.setCurrentView("individuals-form")}>
-                Add new individual
-              </button> */}
             </p>
             <p>
               <label>Location</label>
@@ -143,17 +129,64 @@ function FormModal(props) {
   );
 }
 
-function AddSightingForm({
-  newSighting,
-  setNewSighting,
-  addSighting,
-  setCurrentView,
-}) {
+function AddIndividualsForm() {
   const [modalShow, setModalShow] = useState(false);
   const [individuals, setIndividuals] = useState([]);
+
+  // Get Individuals
+  // useEffect(() => {
+  //   const getIndividuals = async () => {
+  //     await fetch("http://localhost:8080/individuals")
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         props.setIndividuals(() => [
+  //           ...res.map((individual) => {
+  //             return {
+  //               id: individual.id,
+  //               nickName: individual.nick_name,
+  //               seenDate: individual.seen_on,
+  //               speciesId: individual.species_id,
+  //             };
+  //           }),
+  //         ]);
+  //       });
+  //   };
+  //   getIndividuals();
+  // }, []);
+
   return (
     <>
-      <Button
+      <div className="individuals-form-div">
+        <Form>
+          <Form.Group className="mb-3" controlId="formNickName">
+            <Form.Label>Nick Name</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formSeenDate">
+            <Form.Label>Date Seen</Form.Label>
+            <Form.Control type="password" placeholder="Password" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formSpecies">
+            <Form.Label>Species</Form.Label>
+            <Form.Control type="password" placeholder="Password" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </div>
+      {/* <Button
         variant="primary"
         onClick={() => setModalShow(true)}
         className="launch-modal-btn">
@@ -168,10 +201,9 @@ function AddSightingForm({
         addSighting={addSighting}
         individuals={individuals}
         setIndividuals={setIndividuals}
-        setCurrentView={setCurrentView}
-      />
+      /> */}
     </>
   );
 }
 
-export default AddSightingForm;
+export default AddIndividualsForm;
