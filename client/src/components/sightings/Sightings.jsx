@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import AddSightingForm from "./AddSightingForm";
-import Form from "react-bootstrap";
+import isBefore from "date-fns/isBefore";
+import isAfter from "date-fns/isAfter";
+import format from "date-fns/format";
 
 const Sightings = () => {
   const [sightings, setSightings] = useState([]);
@@ -12,7 +14,8 @@ const Sightings = () => {
     healthStatus: "",
   });
   const [healthFilter, setHealthFilter] = useState(false);
-
+  const [startDateFilter, setStartDateFilter] = useState("");
+  const [endDateFilter, setEndDateFilter] = useState("");
   // Add Sighting
   const addSighting = async (e) => {
     e.preventDefault();
@@ -64,6 +67,40 @@ const Sightings = () => {
                 })
                 .filter((s) => s.healthStatus === true),
             ]);
+          } else if (startDateFilter !== "") {
+            setSightings(() => [
+              ...res
+                .map((sighting) => {
+                  return {
+                    id: sighting.id,
+                    location: sighting.location,
+                    date: sighting.date_time,
+                    individual: sighting.nick_name,
+                    healthStatus: sighting.healthy,
+                  };
+                })
+                .filter((s) => {
+                  let startDate = new Date(startDateFilter);
+                  return isBefore(startDate, new Date(s.date));
+                }),
+            ]);
+          } else if (endDateFilter !== "") {
+            setSightings(() => [
+              ...res
+                .map((sighting) => {
+                  return {
+                    id: sighting.id,
+                    location: sighting.location,
+                    date: sighting.date_time,
+                    individual: sighting.nick_name,
+                    healthStatus: sighting.healthy,
+                  };
+                })
+                .filter((s) => {
+                  let endDate = new Date(endDateFilter);
+                  return isAfter(endDate, new Date(s.date));
+                }),
+            ]);
           } else {
             setSightings(() => [
               ...res.map((sighting) => {
@@ -80,7 +117,7 @@ const Sightings = () => {
         });
     };
     getSightings();
-  }, [sightings, healthFilter]);
+  }, [sightings, healthFilter, startDateFilter, endDateFilter]);
 
   return (
     <>
@@ -104,8 +141,17 @@ const Sightings = () => {
             <strong> Filter by Health Status </strong>
           </div>
           <div className="date-range-filter-div">
-            <input />
-            <input />
+            <strong>Filter By Date</strong>
+            <input
+              type="date"
+              value={startDateFilter}
+              onChange={(e) => setStartDateFilter(e.target.value)}
+            />
+            <input
+              type="date"
+              value={endDateFilter}
+              onChange={(e) => setEndDateFilter(e.target.value)}
+            />
           </div>
         </div>
         <ul>
@@ -131,9 +177,11 @@ const Sightings = () => {
               <li key={ind} className="cards">
                 id: {sighting.id}
                 <br />
+                sighting date: {format(new Date(sighting.date), "MM/dd/yyyy")}
+                <br />
                 location: {sighting.location}
                 <br />
-                individual: {sighting.individual},
+                individual: {sighting.individual.replace(",", "")}
                 <br />
                 healthStatus:{" "}
                 {sighting.healthStatus === true ? "true" : "false"}
