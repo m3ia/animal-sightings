@@ -19,7 +19,7 @@ function App() {
           <Sightings setCurrentView={setCurrentView} />
         )}
       </div>
-      <div className="individuals">
+      <div className="individuals-div">
         {currentView === "individuals" && (
           <Individuals setCurrentView={setCurrentView} />
         )}

@@ -84,12 +84,6 @@ function FormModal(props) {
                   );
                 })}
               </Form.Select>
-              {/* <button
-                className="modal-btn-ind-form"
-                variant="primary"
-                onClick={props.setCurrentView("individuals-form")}>
-                Add new individual
-              </button> */}
             </p>
             <p>
               <label>Location</label>
@@ -143,12 +137,7 @@ function FormModal(props) {
   );
 }
 
-function AddSightingForm({
-  newSighting,
-  setNewSighting,
-  addSighting,
-  setCurrentView,
-}) {
+function AddSightingForm({newSighting, setNewSighting, addSighting}) {
   const [modalShow, setModalShow] = useState(false);
   const [individuals, setIndividuals] = useState([]);
   return (
@@ -168,7 +157,6 @@ function AddSightingForm({
         addSighting={addSighting}
         individuals={individuals}
         setIndividuals={setIndividuals}
-        setCurrentView={setCurrentView}
       />
     </>
   );

@@ -10,7 +10,7 @@ const MainPage = ({setCurrentView}) => {
           Sightings
         </div>
         <div
-          className="individuals-btn"
+          className="individuals-menu-btn"
           onClick={() => setCurrentView("individuals")}>
           Individuals
         </div>

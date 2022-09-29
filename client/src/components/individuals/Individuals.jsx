@@ -3,46 +3,41 @@ import AddIndividualsForm from "./AddIndividualsForm";
 
 const Individuals = () => {
   const [individuals, setIndividuals] = useState([]);
-  const [individual, setIndividual] = useState({
+  const [newIndividual, setNewIndividual] = useState({
     nickName: "",
     seenDate: "",
     speciesId: 0,
   });
 
   // Add Individual
-  // const addSighting = async (e) => {
-  //   e.preventDefault();
+  const addIndividual = async (e) => {
+    e.preventDefault();
 
-  //   const individual = {
-  //     nickName: "",
-  //     seenDate: "",
-  //     speciesId: 0,
-  //     location: newSighting.location,
-  //     date: newSighting.date,
-  //     individualId: newSighting.individualId,
-  //     healthStatus: newSighting.healthStatus,
-  //   };
+    const individual = {
+      nickName: newIndividual.nickName,
+      seenDate: newIndividual.seenDate,
+      speciesId: newIndividual.speciesId,
+    };
 
-  // const res = await fetch("http://localhost:8080/sightings", {
-  //   method: "POST",
-  //   headers: {
-  //     Accept: "application/json",
-  //     "Content-Type": "application/json",
-  //   },
-  //   // Sent in with the request
-  //   body: JSON.stringify(sighting),
-  // });
+    const res = await fetch("http://localhost:8080/individuals", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      // Sent in with the request
+      body: JSON.stringify(individual),
+    });
 
-  //   const content = await res.json();
-  //   console.log("content", content);
-  //   setIndividuals([...sightings, content]);
-  //   setNewSighting({
-  //     location: "",
-  //     date: "",
-  //     individualId: 0,
-  //     healthStatus: "",
-  //   });
-  // };
+    const content = await res.json();
+    console.log("content", content);
+    setIndividuals([...individuals, content]);
+    setNewIndividual({
+      nickName: "",
+      seenDate: "",
+      speciesId: 0,
+    });
+  };
 
   // Get Individuals
   useEffect(() => {
@@ -67,15 +62,16 @@ const Individuals = () => {
 
   return (
     <>
-      {/* Parent div: sightings-div */}
+      {/* Parent div: individuals-div */}
       <AddIndividualsForm
-      // sightings={sightings}
-      // setSightings={setSightings}
-      // newSighting={newSighting}
-      // setNewSighting={setNewSighting}
-      // addSighting={addSighting}
+        individuals={individuals}
+        setIndividuals={setIndividuals}
+        newIndividual={newIndividual}
+        setNewIndividual={setNewIndividual}
+        addIndividual={addIndividual}
       />
       <div className="cards-div">
+        <h3>Individuals</h3>
         <ul>
           {individuals.map((individual, ind) => {
             return (

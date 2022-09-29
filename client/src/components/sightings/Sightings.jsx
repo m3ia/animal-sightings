@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import AddSightingForm from "./AddSightingForm";
 
-const Sightings = ({setCurrentView}) => {
+const Sightings = () => {
   const [sightings, setSightings] = useState([]);
   const [newSighting, setNewSighting] = useState({
     id: "",
@@ -73,9 +73,9 @@ const Sightings = ({setCurrentView}) => {
         newSighting={newSighting}
         setNewSighting={setNewSighting}
         addSighting={addSighting}
-        setCurrentView={setCurrentView}
       />
       <div className="cards-div">
+        <h3>Sightings</h3>
         <ul>
           {sightings.map((sighting, ind) => {
             return (

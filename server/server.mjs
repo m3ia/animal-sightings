@@ -62,3 +62,13 @@ app.get('/individuals', async function (req, res) {
     return res.status(400).json({ e });
   }
 });
+
+// GET - All Species --------------------------------------------------------
+app.get('/species', async function (req, res) {
+  try {
+    const species = await db.any('SELECT * FROM species');
+    res.send(species);
+  } catch (e) {
+    return res.status(400).json({ e });
+  }
+});

@@ -2,25 +2,24 @@ import {useState, useEffect} from "react";
 import {Button, Modal, Form} from "react-bootstrap";
 
 function FormModal(props) {
-  // Get Individuals
+  // Get Species for selection
   useEffect(() => {
-    const getIndividuals = async () => {
-      await fetch("http://localhost:8080/individuals")
+    const getSpecies = async () => {
+      await fetch("http://localhost:8080/species")
         .then((res) => res.json())
         .then((res) => {
-          props.setIndividuals(() => [
-            ...res.map((individual) => {
+          props.setSpecies(() => [
+            ...res.map((s) => {
               return {
-                id: individual.id,
-                nickName: individual.nick_name,
-                seenDate: individual.seen_on,
-                speciesId: individual.species_id,
+                id: s.id,
+                commonName: s.common_name,
+                scientificName: s.scientific_name,
               };
             }),
           ]);
         });
     };
-    getIndividuals();
+    getSpecies();
   }, []);
 
   return (
@@ -31,78 +30,60 @@ function FormModal(props) {
       centered>
       <Modal.Header closeButton onClick={props.onHide}>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add a New Sighting
+          Add a New Individual
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Sighting Form</h4>
-        <form id="add-sighting" action="#">
+        <h4>Individual Form</h4>
+        <form id="add-individual" action="#">
           <fieldset>
             <p>
-              <label>Date</label>
+              <label>Nick Name</label>
               <br />
               <input
-                type="date"
-                id="add-date"
-                value={props.newSighting.date}
+                type="text"
+                id="add-individual-nickname"
+                value={props.newIndividual.nickName}
                 onChange={(e) => {
-                  props.setNewSighting((prev) => ({
+                  props.setNewIndividual((prev) => ({
                     ...prev,
-                    date: e.target.value,
+                    nickName: e.target.value,
                   }));
                 }}
               />
             </p>
             <p>
-              <label>Individual</label>
+              <label>Species</label>
               <br />
               <Form.Select
                 aria-label="Default select example"
                 onChange={(e) =>
-                  props.setNewSighting((prev) => ({
+                  props.setNewIndividual((prev) => ({
                     ...prev,
-                    individualId: parseInt(e.target.value),
+                    speciesId: parseInt(e.target.value),
                   }))
                 }>
-                <option>Select Individual Name</option>
-                {props.individuals.map((individual) => {
+                <option>Select Species Type</option>
+                {props.species.map((s) => {
                   return (
-                    <option
-                      key={individual.id}
-                      value={individual.id}
-                      name={individual.id}>
-                      {individual.nickName}
+                    <option key={s.id} value={s.id} name={s.id}>
+                      {s.commonName} ({s.scientificName})
                     </option>
                   );
                 })}
               </Form.Select>
             </p>
             <p>
-              <label>Location</label>
+              <label>Last Date Seen</label>
               <br />
               <input
-                type="text"
-                id="add-location"
-                value={props.newSighting.location || ""}
+                type="date"
+                id="add-individual-date-seen"
+                value={props.newIndividual.seenDate}
                 onChange={(e) =>
-                  props.setNewSighting((prev) => ({
+                  props.setNewIndividual((prev) => ({
                     ...prev,
-                    location: e.target.value,
-                  }))
-                }
-              />
-            </p>
-            <p>
-              <label>Health Status</label>
-              <br />
-              <input
-                type="text"
-                id="add-health-status"
-                value={props.newSighting.healthStatus || ""}
-                onChange={(e) =>
-                  props.setNewSighting((prev) => ({
-                    ...prev,
-                    healthStatus: e.target.value,
+                    seenDate: e.target.value,
                   }))
                 }
               />
@@ -118,7 +99,7 @@ function FormModal(props) {
           variant="primary"
           type="submit"
           onClick={(e) => {
-            props.addSighting(e);
+            props.addIndividual(e);
             props.onHide();
           }}>
           {" "}
@@ -129,9 +110,21 @@ function FormModal(props) {
   );
 }
 
-function AddIndividualsForm() {
+function AddIndividualsForm({
+  individuals,
+  setIndividuals,
+  newIndividual,
+  setNewIndividual,
+  addIndividual,
+}) {
   const [modalShow, setModalShow] = useState(false);
-  const [individuals, setIndividuals] = useState([]);
+  const [species, setSpecies] = useState([]);
+  // const [individuals, setIndividuals] = useState([]);
+  // const [newIndividual, setNewIndividual] = useState({
+  //   nickName: "",
+  //   seenDate: "",
+  //   speciesId: 0,
+  // });
 
   // Get Individuals
   // useEffect(() => {
@@ -156,37 +149,8 @@ function AddIndividualsForm() {
 
   return (
     <>
-      <div className="individuals-form-div">
-        <Form>
-          <Form.Group className="mb-3" controlId="formNickName">
-            <Form.Label>Nick Name</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formSeenDate">
-            <Form.Label>Date Seen</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formSpecies">
-            <Form.Label>Species</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </div>
-      {/* <Button
+      <div className="individuals-form-div"></div>
+      <Button
         variant="primary"
         onClick={() => setModalShow(true)}
         className="launch-modal-btn">
@@ -196,12 +160,12 @@ function AddIndividualsForm() {
       <FormModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        newSighting={newSighting}
-        setNewSighting={setNewSighting}
-        addSighting={addSighting}
-        individuals={individuals}
-        setIndividuals={setIndividuals}
-      /> */}
+        newIndividual={newIndividual}
+        setNewIndividual={setNewIndividual}
+        addIndividual={addIndividual}
+        species={species}
+        setSpecies={setSpecies}
+      />
     </>
   );
 }
