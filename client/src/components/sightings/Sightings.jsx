@@ -141,17 +141,25 @@ const Sightings = () => {
             <strong> Filter by Health Status </strong>
           </div>
           <div className="date-range-filter-div">
-            <strong>Filter By Date</strong>
-            <input
-              type="date"
-              value={startDateFilter}
-              onChange={(e) => setStartDateFilter(e.target.value)}
-            />
-            <input
-              type="date"
-              value={endDateFilter}
-              onChange={(e) => setEndDateFilter(e.target.value)}
-            />
+            <strong>Filter By Date:</strong>
+            <br />
+            <label>
+              Starting Date:
+              <input
+                type="date"
+                value={startDateFilter}
+                onChange={(e) => setStartDateFilter(e.target.value)}
+              />
+            </label>
+            <br />
+            <label>
+              Ending Date:
+              <input
+                type="date"
+                value={endDateFilter}
+                onChange={(e) => setEndDateFilter(e.target.value)}
+              />
+            </label>
           </div>
         </div>
         <ul>
