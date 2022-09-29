@@ -50,21 +50,37 @@ const Sightings = () => {
       await fetch("http://localhost:8080/sightings")
         .then((res) => res.json())
         .then((res) => {
-          setSightings(() => [
-            ...res.map((sighting) => {
-              return {
-                id: sighting.id,
-                location: sighting.location,
-                date: sighting.date_time,
-                individual: sighting.nick_name,
-                healthStatus: sighting.healthy,
-              };
-            }),
-          ]);
+          if (healthFilter === true) {
+            setSightings(() => [
+              ...res
+                .map((sighting) => {
+                  return {
+                    id: sighting.id,
+                    location: sighting.location,
+                    date: sighting.date_time,
+                    individual: sighting.nick_name,
+                    healthStatus: sighting.healthy,
+                  };
+                })
+                .filter((s) => s.healthStatus === true),
+            ]);
+          } else {
+            setSightings(() => [
+              ...res.map((sighting) => {
+                return {
+                  id: sighting.id,
+                  location: sighting.location,
+                  date: sighting.date_time,
+                  individual: sighting.nick_name,
+                  healthStatus: sighting.healthy,
+                };
+              }),
+            ]);
+          }
         });
     };
     getSightings();
-  }, [sightings]);
+  }, [sightings, healthFilter]);
 
   return (
     <>
@@ -78,16 +94,22 @@ const Sightings = () => {
       />
       <div className="cards-div">
         <h3>Sightings</h3>
-        <div className="health-filter-div">
-          <input
-            type="checkbox"
-            value={healthFilter}
-            onChange={() => setHealthFilter(!healthFilter)}
-          />{" "}
-          <strong> Filter by Health Status </strong>
+        <div className="filters-div">
+          <div className="health-filter-div">
+            <input
+              type="checkbox"
+              value={healthFilter}
+              onChange={() => setHealthFilter(!healthFilter)}
+            />{" "}
+            <strong> Filter by Health Status </strong>
+          </div>
+          <div className="date-range-filter-div">
+            <input />
+            <input />
+          </div>
         </div>
         <ul>
-          {healthFilter === true
+          {/* {healthFilter === true
             ? sightings
                 .filter((s) => s.healthStatus === true)
                 .map((sighting, ind) => {
@@ -103,21 +125,21 @@ const Sightings = () => {
                       {sighting.healthStatus === true ? "true" : "false"}
                     </li>
                   );
-                })
-            : sightings.map((sighting, ind) => {
-                return (
-                  <li key={ind} className="cards">
-                    id: {sighting.id}
-                    <br />
-                    location: {sighting.location}
-                    <br />
-                    individual: {sighting.individual},
-                    <br />
-                    healthStatus:{" "}
-                    {sighting.healthStatus === true ? "true" : "false"}
-                  </li>
-                );
-              })}
+                }) */}
+          {sightings.map((sighting, ind) => {
+            return (
+              <li key={ind} className="cards">
+                id: {sighting.id}
+                <br />
+                location: {sighting.location}
+                <br />
+                individual: {sighting.individual},
+                <br />
+                healthStatus:{" "}
+                {sighting.healthStatus === true ? "true" : "false"}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>
