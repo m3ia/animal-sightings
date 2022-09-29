@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import AddSightingForm from "./AddSightingForm";
+import Form from "react-bootstrap";
 
 const Sightings = () => {
   const [sightings, setSightings] = useState([]);
@@ -10,6 +11,7 @@ const Sightings = () => {
     individualId: 0,
     healthStatus: "",
   });
+  const [healthFilter, setHealthFilter] = useState(false);
 
   // Add Sighting
   const addSighting = async (e) => {
@@ -76,21 +78,46 @@ const Sightings = () => {
       />
       <div className="cards-div">
         <h3>Sightings</h3>
+        <div className="health-filter-div">
+          <input
+            type="checkbox"
+            value={healthFilter}
+            onChange={() => setHealthFilter(!healthFilter)}
+          />{" "}
+          <strong> Filter by Health Status </strong>
+        </div>
         <ul>
-          {sightings.map((sighting, ind) => {
-            return (
-              <li key={ind} className="cards">
-                id: {sighting.id}
-                <br />
-                location: {sighting.location}
-                <br />
-                individual: {sighting.individual},
-                <br />
-                healthStatus:{" "}
-                {sighting.healthStatus === true ? "true" : "false"}
-              </li>
-            );
-          })}
+          {healthFilter === true
+            ? sightings
+                .filter((s) => s.healthStatus === true)
+                .map((sighting, ind) => {
+                  return (
+                    <li key={ind} className="cards">
+                      id: {sighting.id}
+                      <br />
+                      location: {sighting.location}
+                      <br />
+                      individual: {sighting.individual},
+                      <br />
+                      healthStatus:{" "}
+                      {sighting.healthStatus === true ? "true" : "false"}
+                    </li>
+                  );
+                })
+            : sightings.map((sighting, ind) => {
+                return (
+                  <li key={ind} className="cards">
+                    id: {sighting.id}
+                    <br />
+                    location: {sighting.location}
+                    <br />
+                    individual: {sighting.individual},
+                    <br />
+                    healthStatus:{" "}
+                    {sighting.healthStatus === true ? "true" : "false"}
+                  </li>
+                );
+              })}
         </ul>
       </div>
     </>
