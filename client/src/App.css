@@ -9,7 +9,7 @@
   flex-direction: row;
   justify-content: center;
 }
-.sightings-menu-btn, .individuals-menu-btn {
+.menu-btns {
   border: 2px solid black;
   width: 200px;
   margin: 20px;

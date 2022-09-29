@@ -92,3 +92,24 @@ app.get('/species', async function (req, res) {
     return res.status(400).json({ e });
   }
 });
+
+// GET - All sighting locations and individuals ------------------------------
+app.get('/locations', async function (req, res) {
+  try {
+    const locations = await db.any('SELECT Sightings.location, Individuals.nick_name FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.location');
+    let locationsDict = {};
+    for (let i of locations) {
+      if (locationsDict.hasOwnProperty(i.location) === true) {
+        if (!locationsDict[i.location].includes(i.nick_name)) {
+          locationsDict[i.location].push(i.nick_name);
+        } 
+      } else {
+        locationsDict[i.location] = [i.nick_name];
+      }
+    }
+    res.send(locationsDict);
+  } catch (e) {
+    return res.status(400).json({ e });
+  }
+});
+
