@@ -119,33 +119,6 @@ function AddIndividualsForm({
 }) {
   const [modalShow, setModalShow] = useState(false);
   const [species, setSpecies] = useState([]);
-  // const [individuals, setIndividuals] = useState([]);
-  // const [newIndividual, setNewIndividual] = useState({
-  //   nickName: "",
-  //   seenDate: "",
-  //   speciesId: 0,
-  // });
-
-  // Get Individuals
-  // useEffect(() => {
-  //   const getIndividuals = async () => {
-  //     await fetch("http://localhost:8080/individuals")
-  //       .then((res) => res.json())
-  //       .then((res) => {
-  //         props.setIndividuals(() => [
-  //           ...res.map((individual) => {
-  //             return {
-  //               id: individual.id,
-  //               nickName: individual.nick_name,
-  //               seenDate: individual.seen_on,
-  //               speciesId: individual.species_id,
-  //             };
-  //           }),
-  //         ]);
-  //       });
-  //   };
-  //   getIndividuals();
-  // }, []);
 
   return (
     <>

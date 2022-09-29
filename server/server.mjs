@@ -63,6 +63,26 @@ app.get('/individuals', async function (req, res) {
   }
 });
 
+// POST - Add a Individual ------------------------------------------------------
+app.post('/individuals', async (req, res) => {
+  const individual = {
+    nickName: req.body.nickName,
+    seenDate: req.body.seenDate,
+    speciesId: req.body.speciesId,
+  };
+  try {
+    const createdIndividual = await db.one(
+      'INSERT INTO individuals (nick_name, seen_on, species_id) VALUES ($1, $2, $3) RETURNING * ',
+      [individual.nickName, individual.seenDate, individual.speciesId]
+    );
+  
+    res.send(createdIndividual);
+    
+  } catch (e) {
+    return res.status(400).json({ e });
+  }
+});
+
 // GET - All Species --------------------------------------------------------
 app.get('/species', async function (req, res) {
   try {
