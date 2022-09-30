@@ -6,6 +6,7 @@ import format from "date-fns/format";
 import {Form} from "react-bootstrap";
 
 const transformData = (serverSighting) => {
+  console.log("serverSighting: ", serverSighting);
   return {
     id: serverSighting.id,
     location: serverSighting.location,
@@ -53,7 +54,9 @@ const Sightings = () => {
 
     const content = await res.json();
     console.log("content", content);
-    setSightings([...sightings, transformData(content)]);
+    // setSightings([transformData(content), ...sightings]);
+    getSightings();
+
     setNewSighting({
       location: "",
       date: "",
@@ -61,7 +64,6 @@ const Sightings = () => {
       healthStatus: "",
     });
   };
-
   // Edit Sighting
   const clickEdit = (sighting) => {
     console.log("sighting: ", sighting);
@@ -95,70 +97,19 @@ const Sightings = () => {
       },
       body: JSON.stringify(sightings),
     });
-    const content = await rawRes.json();
-    setSightings(content.map(transformData));
+    // const content = await rawRes.json();
+    // setSightings();
+    // setSightings(content.map(transformData));
+    getSightings();
   };
-
-  // Get Sightings
-  useEffect(() => {
-    const getSightings = async () => {
-      await fetch("http://localhost:8080/sightings")
-        .then((res) => res.json())
-        .then((res) => {
-          if (healthFilter === true) {
-            setSightings(() => [
-              ...res
-                .map((sighting) => {
-                  return {
-                    id: sighting.id,
-                    location: sighting.location,
-                    date: sighting.date_time,
-                    individualId: sighting.individual_id,
-                    individual: sighting.nick_name,
-                    healthStatus: sighting.healthy,
-                  };
-                })
-                .filter((s) => s.healthStatus === true),
-            ]);
-          } else if (startDateFilter !== "") {
-            setSightings(() => [
-              ...res
-                .map((sighting) => {
-                  return {
-                    id: sighting.id,
-                    location: sighting.location,
-                    date: sighting.date_time,
-                    individualId: sighting.individual_id,
-                    individual: sighting.nick_name,
-                    healthStatus: sighting.healthy,
-                  };
-                })
-                .filter((s) => {
-                  let startDate = new Date(startDateFilter);
-                  return isBefore(startDate, new Date(s.date));
-                }),
-            ]);
-          } else if (endDateFilter !== "") {
-            setSightings(() => [
-              ...res
-                .map((sighting) => {
-                  return {
-                    id: sighting.id,
-                    location: sighting.location,
-                    date: sighting.date_time,
-                    individualId: sighting.individual_id,
-                    individual: sighting.nick_name,
-                    healthStatus: sighting.healthy,
-                  };
-                })
-                .filter((s) => {
-                  let endDate = new Date(endDateFilter);
-                  return isAfter(endDate, new Date(s.date));
-                }),
-            ]);
-          } else {
-            setSightings(() => [
-              ...res.map((sighting) => {
+  const getSightings = async () => {
+    await fetch("http://localhost:8080/sightings")
+      .then((res) => res.json())
+      .then((res) => {
+        if (healthFilter === true) {
+          setSightings(() => [
+            ...res
+              .map((sighting) => {
                 return {
                   id: sighting.id,
                   location: sighting.location,
@@ -167,11 +118,63 @@ const Sightings = () => {
                   individual: sighting.nick_name,
                   healthStatus: sighting.healthy,
                 };
+              })
+              .filter((s) => s.healthStatus === true),
+          ]);
+        } else if (startDateFilter !== "") {
+          setSightings(() => [
+            ...res
+              .map((sighting) => {
+                return {
+                  id: sighting.id,
+                  location: sighting.location,
+                  date: sighting.date_time,
+                  individualId: sighting.individual_id,
+                  individual: sighting.nick_name,
+                  healthStatus: sighting.healthy,
+                };
+              })
+              .filter((s) => {
+                let startDate = new Date(startDateFilter);
+                return isBefore(startDate, new Date(s.date));
               }),
-            ]);
-          }
-        });
-    };
+          ]);
+        } else if (endDateFilter !== "") {
+          setSightings(() => [
+            ...res
+              .map((sighting) => {
+                return {
+                  id: sighting.id,
+                  location: sighting.location,
+                  date: sighting.date_time,
+                  individualId: sighting.individual_id,
+                  individual: sighting.nick_name,
+                  healthStatus: sighting.healthy,
+                };
+              })
+              .filter((s) => {
+                let endDate = new Date(endDateFilter);
+                return isAfter(endDate, new Date(s.date));
+              }),
+          ]);
+        } else {
+          setSightings(() => [
+            ...res.map((sighting) => {
+              return {
+                id: sighting.id,
+                location: sighting.location,
+                date: sighting.date_time,
+                individualId: sighting.individual_id,
+                individual: sighting.nick_name,
+                healthStatus: sighting.healthy,
+              };
+            }),
+          ]);
+        }
+      });
+  };
+  // Get Sightings
+  useEffect(() => {
     getSightings();
   }, [healthFilter, startDateFilter, endDateFilter]);
 

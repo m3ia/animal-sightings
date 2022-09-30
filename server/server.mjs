@@ -143,8 +143,8 @@ app.delete('/sightings/:id', async (req, res) => {
   const sightingId = req.params.id;
   try {
     await db.none('DELETE FROM sightings WHERE id=$1', [sightingId]);
-    const sightings = await db.any('SELECT Sightings.location, Individuals.nick_name FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.location', [true]);
-    res.send(sightings);
+    // const sightings = await db.any('SELECT Sightings.location, Individuals.nick_name FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.location', [true]);
+    // res.send(sightings);
   } catch (e) {
     return res.status(400).json({ e });
   }

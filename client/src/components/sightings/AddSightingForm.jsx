@@ -146,7 +146,7 @@ function AddSightingForm({newSighting, setNewSighting, addSighting}) {
         variant="primary"
         onClick={() => setModalShow(true)}
         className="launch-modal-btn">
-        Launch vertically centered modal
+        Add New Sighting
       </Button>
 
       <FormModal

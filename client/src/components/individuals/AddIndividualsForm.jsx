@@ -127,7 +127,7 @@ function AddIndividualsForm({
         variant="primary"
         onClick={() => setModalShow(true)}
         className="launch-modal-btn">
-        Launch vertically centered modal
+        Add New Individual
       </Button>
 
       <FormModal

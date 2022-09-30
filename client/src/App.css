@@ -40,7 +40,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
+  width: 75%;
   max-height: 800px;
   overflow-y: auto;
   /* max-width: 500px; */
@@ -57,5 +57,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+}
+
+table {
+  border: 2px solid black;
+  width: 700px;
 }
 
