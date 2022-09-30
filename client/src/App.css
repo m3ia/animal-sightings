@@ -29,7 +29,7 @@
   width: 200px;
 }
 /* CARDS ------------------------------------------------ */
-.sightings-div, .individuals-div {
+.sightings-div, .individuals-div, .locations-div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,9 +40,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 500px;
+  width: 50%;
+  max-height: 800px;
   overflow-y: auto;
-  max-width: 500px;
+  /* max-width: 500px; */
 }
 .cards {
   border: 2px solid #e74c3c;

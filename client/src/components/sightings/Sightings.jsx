@@ -3,7 +3,18 @@ import AddSightingForm from "./AddSightingForm";
 import isBefore from "date-fns/isBefore";
 import isAfter from "date-fns/isAfter";
 import format from "date-fns/format";
+import {Form} from "react-bootstrap";
 
+const transformData = (serverSighting) => {
+  return {
+    id: serverSighting.id,
+    location: serverSighting.location,
+    date: serverSighting.date_time,
+    individualId: serverSighting.individual_id,
+    individual: serverSighting.nick_name,
+    healthStatus: serverSighting.healthy,
+  };
+};
 const Sightings = () => {
   const [sightings, setSightings] = useState([]);
   const [newSighting, setNewSighting] = useState({
@@ -16,6 +27,9 @@ const Sightings = () => {
   const [healthFilter, setHealthFilter] = useState(false);
   const [startDateFilter, setStartDateFilter] = useState("");
   const [endDateFilter, setEndDateFilter] = useState("");
+  const [updatedSighting, setUpdatedSighting] = useState(null);
+  const [individuals, setIndividuals] = useState([]);
+
   // Add Sighting
   const addSighting = async (e) => {
     e.preventDefault();
@@ -39,7 +53,7 @@ const Sightings = () => {
 
     const content = await res.json();
     console.log("content", content);
-    setSightings([...sightings, content]);
+    setSightings([...sightings, transformData(content)]);
     setNewSighting({
       location: "",
       date: "",
@@ -47,6 +61,35 @@ const Sightings = () => {
       healthStatus: "",
     });
   };
+
+  // Edit Sighting
+  const clickEdit = (sighting) => {
+    console.log("sighting: ", sighting);
+    setUpdatedSighting({...sighting});
+  };
+
+  const editSighting = async (e, id) => {
+    console.log(1);
+    e.preventDefault();
+
+    console.log(2);
+    const rawRes = await fetch(`http://localhost:8080/sightings/${id}`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedSighting),
+    });
+    console.log(3);
+    const content = await rawRes.json();
+
+    console.log(4);
+    setSightings(content.map(transformData));
+    console.log(5);
+    setUpdatedSighting(null);
+  };
+
   // Get Sightings
   useEffect(() => {
     const getSightings = async () => {
@@ -61,6 +104,7 @@ const Sightings = () => {
                     id: sighting.id,
                     location: sighting.location,
                     date: sighting.date_time,
+                    individualId: sighting.individual_id,
                     individual: sighting.nick_name,
                     healthStatus: sighting.healthy,
                   };
@@ -75,6 +119,7 @@ const Sightings = () => {
                     id: sighting.id,
                     location: sighting.location,
                     date: sighting.date_time,
+                    individualId: sighting.individual_id,
                     individual: sighting.nick_name,
                     healthStatus: sighting.healthy,
                   };
@@ -92,6 +137,7 @@ const Sightings = () => {
                     id: sighting.id,
                     location: sighting.location,
                     date: sighting.date_time,
+                    individualId: sighting.individual_id,
                     individual: sighting.nick_name,
                     healthStatus: sighting.healthy,
                   };
@@ -108,6 +154,7 @@ const Sightings = () => {
                   id: sighting.id,
                   location: sighting.location,
                   date: sighting.date_time,
+                  individualId: sighting.individual_id,
                   individual: sighting.nick_name,
                   healthStatus: sighting.healthy,
                 };
@@ -117,8 +164,28 @@ const Sightings = () => {
         });
     };
     getSightings();
-  }, [sightings, healthFilter, startDateFilter, endDateFilter]);
+  }, [healthFilter, startDateFilter, endDateFilter]);
 
+  // Get Individual
+  useEffect(() => {
+    const getIndividuals = async () => {
+      await fetch("http://localhost:8080/individuals")
+        .then((res) => res.json())
+        .then((res) => {
+          setIndividuals(() => [
+            ...res.map((individual) => {
+              return {
+                id: individual.id,
+                nickName: individual.nick_name,
+                seenDate: individual.seen_on,
+                speciesId: individual.species_id,
+              };
+            }),
+          ]);
+        });
+    };
+    getIndividuals();
+  }, []);
   return (
     <>
       {/* Parent div: sightings-div */}
@@ -162,41 +229,137 @@ const Sightings = () => {
             </label>
           </div>
         </div>
-        <ul>
-          {/* {healthFilter === true
-            ? sightings
-                .filter((s) => s.healthStatus === true)
-                .map((sighting, ind) => {
-                  return (
-                    <li key={ind} className="cards">
-                      id: {sighting.id}
-                      <br />
-                      location: {sighting.location}
-                      <br />
-                      individual: {sighting.individual},
-                      <br />
-                      healthStatus:{" "}
-                      {sighting.healthStatus === true ? "true" : "false"}
-                    </li>
-                  );
-                }) */}
-          {sightings.map((sighting, ind) => {
-            return (
-              <li key={ind} className="cards">
-                id: {sighting.id}
-                <br />
-                sighting date: {format(new Date(sighting.date), "MM/dd/yyyy")}
-                <br />
-                location: {sighting.location}
-                <br />
-                individual: {sighting.individual.replace(",", "")}
-                <br />
-                healthStatus:{" "}
-                {sighting.healthStatus === true ? "true" : "false"}
-              </li>
-            );
-          })}
-        </ul>
+        {/* Sightings Table */}
+        <div className="table-div">
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Sighting Date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Individual</th>
+                <th scope="col">Health Status</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            {sightings.map((sighting, ind) => {
+              return (
+                <tbody key={ind}>
+                  {updatedSighting !== null &&
+                  updatedSighting.id === sighting.id ? (
+                    <tr key={ind}>
+                      <td>{sighting.id}</td>
+                      <td>
+                        <input
+                          type="date"
+                          id="add-date"
+                          value={updatedSighting.date}
+                          onChange={(e) => {
+                            setUpdatedSighting((prev) => ({
+                              ...prev,
+                              date: format(
+                                new Date(e.target.value),
+                                "yyyy-MM-dd"
+                              ),
+                            }));
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          id="add-location"
+                          value={updatedSighting.location || ""}
+                          placeholder="Add location"
+                          onChange={(e) =>
+                            updatedSighting((prev) => ({
+                              ...prev,
+                              location: e.target.value,
+                            }))
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Select
+                          aria-label="Default select example"
+                          onChange={(e) =>
+                            setUpdatedSighting((prev) => ({
+                              ...prev,
+                              individualId: parseInt(e.target.value),
+                            }))
+                          }>
+                          <option>Select Individual Name</option>
+                          {individuals.map((individual) => {
+                            return (
+                              <option
+                                key={individual.id}
+                                value={individual.id}
+                                name={individual.id}>
+                                {individual.nickName}
+                              </option>
+                            );
+                          })}
+                        </Form.Select>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          id="add-health-status"
+                          value={updatedSighting.healthStatus}
+                          onChange={(e) =>
+                            setUpdatedSighting((prev) => ({
+                              ...prev,
+                              healthStatus: e.target.value,
+                            }))
+                          }
+                        />
+                      </td>
+                      <td>
+                        <button onClick={() => setUpdatedSighting(null)}>
+                          <span className="material-symbols-outlined">
+                            cancel
+                          </span>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          type="submit"
+                          onClick={(e) => {
+                            editSighting(e, sighting.id);
+                          }}>
+                          <span className="material-symbols-outlined">
+                            save
+                          </span>
+                        </button>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr key={ind}>
+                      <td>{sighting.id}</td>
+                      <td>{sighting.date}</td>
+                      <td>{sighting.location}</td>
+                      <td>{sighting.individual}</td>
+                      <td>
+                        {sighting.healthStatus === true ? "true" : "false"}
+                      </td>
+                      <td>
+                        <span
+                          className="material-icons"
+                          onClick={() => clickEdit(sighting)}>
+                          edit
+                        </span>
+                      </td>
+                      <td>
+                        <span className="material-icons">delete</span>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              );
+            })}
+          </table>
+        </div>
       </div>
     </>
   );

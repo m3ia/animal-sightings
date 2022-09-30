@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 // GET - All Sightings --------------------------------------------------------
 app.get('/sightings', async function (req, res) {
   try {
-    const sightings = await db.any('SELECT Sightings.id, Sightings.location, Sightings.date_time, Individuals.nick_name, Sightings.healthy FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.id DESC');
+    const sightings = await db.any('SELECT Sightings.id, Sightings.location, Sightings.date_time, Sightings.individual_id, Individuals.nick_name, Sightings.healthy FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.id DESC');
     res.send(sightings);
   } catch (e) {
     return res.status(400).json({ e });
@@ -49,6 +49,29 @@ app.post('/sightings', async (req, res) => {
     res.send(createdSighting);
     
   } catch (e) {
+    return res.status(400).json({ e });
+  }
+});
+
+// PATCH - Sighting---------------------------------------------------
+app.patch('/sightings/:id', async (req, res) => {
+  const sighting = {
+    id: req.body.id,
+    location: req.body.location,
+    date: req.body.date,
+    individualId: req.body.individualId,
+    healthStatus: req.body.healthStatus
+  };
+  try {
+    const createdSighting = await db.one(
+      `UPDATE sightings SET location = $1, date_time = $2, individual_id = $3, healthy = $4 WHERE id=$5 RETURNING *`,
+      [sighting.location, sighting.date, sighting.individualId, sighting.healthStatus, sighting.id]
+    );
+    console.log('createdSighting: ', createdSighting);
+    const sightings = await db.any('SELECT Sightings.id, Sightings.location, Sightings.date_time, Sightings.individual_id, Individuals.nick_name, Sightings.healthy FROM Sightings LEFT JOIN Individuals ON Sightings.individual_id=Individuals.id ORDER BY Sightings.id DESC', [true]);
+    res.send(sightings);
+  } catch (e) {
+    console.log('e: ', e)
     return res.status(400).json({ e });
   }
 });
