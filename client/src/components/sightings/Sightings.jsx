@@ -69,10 +69,8 @@ const Sightings = () => {
   };
 
   const editSighting = async (e, id) => {
-    console.log(1);
     e.preventDefault();
 
-    console.log(2);
     const rawRes = await fetch(`http://localhost:8080/sightings/${id}`, {
       method: "PATCH",
       headers: {
@@ -81,13 +79,24 @@ const Sightings = () => {
       },
       body: JSON.stringify(updatedSighting),
     });
-    console.log(3);
-    const content = await rawRes.json();
 
-    console.log(4);
+    const content = await rawRes.json();
     setSightings(content.map(transformData));
-    console.log(5);
     setUpdatedSighting(null);
+  };
+
+  // Delete Sighting
+  const deleteSighting = async (id) => {
+    const rawRes = await fetch(`http://localhost:8080/sightings/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sightings),
+    });
+    const content = await rawRes.json();
+    setSightings(content.map(transformData));
   };
 
   // Get Sightings
@@ -351,7 +360,11 @@ const Sightings = () => {
                         </span>
                       </td>
                       <td>
-                        <span className="material-icons">delete</span>
+                        <span
+                          className="material-icons"
+                          onClick={() => deleteSighting(sighting.id)}>
+                          delete
+                        </span>
                       </td>
                     </tr>
                   )}
