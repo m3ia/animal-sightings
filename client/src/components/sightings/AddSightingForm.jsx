@@ -37,7 +37,7 @@ function FormModal(props) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton onClick={props.onHide}>
         <Modal.Title id="contained-modal-title-vcenter">
           Add a New Sighting
         </Modal.Title>
@@ -137,19 +137,16 @@ function FormModal(props) {
   );
 }
 
-function AddSightingForm({
-  sightings,
-  setSightings,
-  newSighting,
-  setNewSighting,
-  addSighting,
-}) {
+function AddSightingForm({newSighting, setNewSighting, addSighting}) {
   const [modalShow, setModalShow] = useState(false);
   const [individuals, setIndividuals] = useState([]);
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        Launch vertically centered modal
+      <Button
+        variant="primary"
+        onClick={() => setModalShow(true)}
+        className="launch-modal-btn">
+        Add New Sighting
       </Button>
 
       <FormModal
