@@ -4,15 +4,22 @@
 /* NAVIGATION ------------------------------------------- */
 
 /* Main Menu Buttons */
+h2 {
+  color: green;
+}
 .main-menu-btns {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 .menu-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 2px solid black;
   width: 200px;
   margin: 20px;
+  height: 200px;
 }
 .footer {
   display: flex;
@@ -21,8 +28,12 @@
 }
 /* Return to home button in footer */
 .menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 2px solid black;
   width: 200px;
+  height: 200px;
 }
 /* MODALS */
 .launch-modal-btn {
@@ -46,7 +57,7 @@
   /* max-width: 500px; */
 }
 .cards {
-  border: 2px solid #e74c3c;
+  border: 2px solid green;
   text-align: left;
   padding: 8px;
   margin: 8px;
